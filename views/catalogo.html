@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo | Motorepuestos</title>
+    <style>
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f8f9fa;
+            color: #2d3436;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 20px 45px;
+            position: relative;
+            overflow: hidden;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(233,69,96,.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(233,69,96,.08) 0%, transparent 50%);
+            animation: glow 8s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { transform: scale(1); opacity: .6; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        header h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            letter-spacing: 4px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 4px 30px rgba(0,0,0,.3);
+            will-change: transform;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: .8;
+            margin-top: 8px;
+            position: relative;
+            z-index: 1;
+            will-change: transform;
+        }
+
+        .parallax-bg {
+            position: absolute;
+            inset: -100px -50px;
+            background:
+                radial-gradient(circle at 30% 40%, rgba(233,69,96,.06) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(233,69,96,.04) 0%, transparent 50%);
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        nav {
+            background: #e94560;
+            padding: 12px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(233,69,96,.3);
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: .9rem;
+            letter-spacing: .3px;
+            transition: background .3s, transform .3s;
+        }
+
+        nav a:hover {
+            background: rgba(255,255,255,.15);
+            transform: translateY(-1px);
+        }
+
+        .hero-parallax {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a2e 0%, #24305e 100%);
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+            margin-bottom: 0;
+        }
+
+        .hero-parallax .hero-bg {
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,.15), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,.1), transparent),
+                radial-gradient(2px 2px at 50px 160px, rgba(255,255,255,.12), transparent),
+                radial-gradient(2px 2px at 90px 40px, rgba(255,255,255,.08), transparent),
+                radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,.15), transparent),
+                radial-gradient(2px 2px at 160px 30px, rgba(255,255,255,.1), transparent);
+            background-size: 200px 200px;
+            will-change: transform;
+            pointer-events: none;
+        }
+
+        .titulo {
+            text-align: center;
+            padding: 50px 20px 30px;
+            animation: fadeUp .6s ease-out;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .titulo h2 {
+            font-size: 2rem;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .titulo p {
+            color: #636e72;
+            font-size: 1.05rem;
+        }
+
+        .catalogo {
+            width: 92%;
+            max-width: 1400px;
+            margin: 0 auto 50px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 28px;
+            padding-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,.06);
+            transition: transform .4s cubic-bezier(.175,.885,.32,1.275), box-shadow .4s ease;
+            animation: cardIn .5s ease-out both;
+            cursor: default;
+            position: relative;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #e94560, #1a1a2e);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform .4s ease;
+        }
+
+        .card:hover::after { transform: scaleX(1); }
+
+        .card:nth-child(1) { animation-delay: .05s; }
+        .card:nth-child(2) { animation-delay: .1s; }
+        .card:nth-child(3) { animation-delay: .15s; }
+        .card:nth-child(4) { animation-delay: .2s; }
+        .card:nth-child(5) { animation-delay: .25s; }
+        .card:nth-child(6) { animation-delay: .3s; }
+        .card:nth-child(7) { animation-delay: .35s; }
+        .card:nth-child(8) { animation-delay: .4s; }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(40px) scale(.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .card:hover { transform: translateY(-8px); box-shadow: 0 16px 48px rgba(0,0,0,.12); }
+
+        .card-img-wrap {
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .card-img-wrap::after {
+            content: '\1F50D';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 2rem;
+            background: rgba(0,0,0,.5);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform .35s cubic-bezier(.175,.885,.32,1.275), opacity .35s;
+            opacity: 0;
+            backdrop-filter: blur(4px);
+        }
+
+        .card-img-wrap:hover::after {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+            transition: transform .5s ease;
+        }
+
+        .card:hover img { transform: scale(1.08); }
+
+        .card-categoria {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(233,69,96,.92);
+            color: white;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: .78rem;
+            font-weight: 700;
+            letter-spacing: .3px;
+            backdrop-filter: blur(4px);
+        }
+
+        .contenido { padding: 22px; }
+
+        .contenido h3 {
+            margin-bottom: 8px;
+            color: #1a1a2e;
+            font-size: 1.2rem;
+        }
+
+        .marca {
+            color: #636e72;
+            font-size: .9rem;
+            margin-bottom: 6px;
+        }
+
+        .descripcion {
+            color: #555;
+            font-size: .9rem;
+            line-height: 1.6;
+            margin-top: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .precio {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #00b894;
+            margin-top: 12px;
+            letter-spacing: -.5px;
+        }
+
+        .btn-carrito {
+            width: 100%;
+            margin-top: 16px;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #e94560, #d63046);
+            color: white;
+            font-weight: 700;
+            font-size: .95rem;
+            cursor: pointer;
+            letter-spacing: .3px;
+            transition: transform .3s, box-shadow .3s;
+            box-shadow: 0 4px 14px rgba(233,69,96,.3);
+        }
+
+        .btn-carrito:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(233,69,96,.4);
+        }
+
+        .btn-carrito:active { transform: translateY(0); }
+
+        .sin-resultados {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,.06);
+        }
+
+        .sin-resultados h2 { color: #636e72; font-size: 1.4rem; }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.75);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .4s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            transform: scale(.9) translateY(20px);
+            transition: transform .4s cubic-bezier(.175,.885,.32,1.275);
+            box-shadow: 0 30px 80px rgba(0,0,0,.4);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-img-wrap {
+            overflow: hidden;
+            border-radius: 20px 0 0 20px;
+            min-height: 400px;
+            background: #f0f0f0;
+            position: relative;
+        }
+
+        .modal-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            inset: 0;
+        }
+
+        .modal-body {
+            padding: 35px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-body .categoria-badge {
+            display: inline-block;
+            background: #e94560;
+            color: white;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: .8rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            align-self: flex-start;
+        }
+
+        .modal-body h2 {
+            font-size: 1.8rem;
+            color: #1a1a2e;
+            margin-bottom: 6px;
+        }
+
+        .modal-body .marca-modal {
+            color: #636e72;
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+
+        .modal-body .cilindraje-modal {
+            color: #636e72;
+            font-size: .95rem;
+            margin-bottom: 16px;
+        }
+
+        .modal-body .descripcion-modal {
+            color: #555;
+            line-height: 1.8;
+            font-size: .95rem;
+            margin-bottom: 20px;
+            flex: 1;
+        }
+
+        .modal-body .precio-modal {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #00b894;
+            margin-bottom: 20px;
+        }
+
+        .modal-body .btn-modal-carrito {
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #e94560, #d63046);
+            color: white;
+            font-weight: 700;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: transform .3s, box-shadow .3s;
+            box-shadow: 0 4px 16px rgba(233,69,96,.3);
+        }
+
+        .modal-body .btn-modal-carrito:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(233,69,96,.4);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0,0,0,.5);
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: background .3s, transform .3s;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-close:hover {
+            background: #e94560;
+            transform: rotate(90deg);
+        }
+
+        .parallax-section {
+            position: relative;
+            overflow: hidden;
+            padding: 60px 0;
+        }
+
+        .parallax-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent, rgba(233,69,96,.03), transparent);
+            pointer-events: none;
+        }
+
+        footer {
+            background: #1a1a2e;
+            color: rgba(255,255,255,.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #e94560, transparent);
+        }
+
+        .footer-inner {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 50px 7% 30px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        .footer-col h3 {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 18px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background: #e94560;
+            border-radius: 2px;
+        }
+
+        .footer-col p, .footer-col a {
+            color: rgba(255,255,255,.6);
+            font-size: .9rem;
+            line-height: 1.8;
+            text-decoration: none;
+            display: block;
+            transition: color .3s, transform .3s;
+        }
+
+        .footer-col a:hover {
+            color: #e94560;
+            transform: translateX(3px);
+        }
+
+        .footer-col .brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .footer-col .brand span { color: #e94560; }
+
+        .footer-col .brand::after { display: none; }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,.08);
+            padding: 20px 7%;
+            text-align: center;
+            font-size: .85rem;
+            color: rgba(255,255,255,.4);
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            header { min-height: 150px; padding: 35px 20px 30px; }
+
+            nav {
+                flex-direction: column;
+                align-items: center;
+                gap: 2px;
+                padding: 10px;
+            }
+
+            nav a { width: 100%; text-align: center; padding: 10px; }
+
+            .catalogo { grid-template-columns: 1fr; gap: 20px; }
+
+            .modal-content {
+                grid-template-columns: 1fr;
+                max-height: 85vh;
+            }
+
+            .modal-img-wrap {
+                min-height: 220px;
+                border-radius: 20px 20px 0 0;
+            }
+
+            .modal-body { padding: 25px; }
+
+            .footer-inner {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .catalogo { grid-template-columns: repeat(2, 1fr); }
+            .footer-inner { grid-template-columns: 1fr 1fr; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header id="mainHeader">
+        <div class="parallax-bg" id="headerBg"></div>
+        <h1 id="headerTitle">MOTOREPUESTOS</h1>
+        <p id="headerSub">Cat&aacute;logo de Motocicletas</p>
+    </header>
+
+    <nav>
+        <a href="index.html">Inicio</a>
+        <a href="catalogo.html">Cat&aacute;logo</a>
+        <a href="carrito.html">Carrito</a>
+        <a href="catalogo.html">Ver Todo</a>
+        <a href="catalogo.html?categoria=Baja">Gama Baja</a>
+        <a href="catalogo.html?categoria=Media">Gama Media</a>
+        <a href="catalogo.html?categoria=Alta">Gama Alta</a>
+    </nav>
+
+    <section class="titulo">
+        <h2 id="tituloCatalogo">Cat&aacute;logo de Motocicletas</h2>
+        <p>Explora nuestras motos disponibles</p>
+    </section>
+
+    <section class="catalogo parallax-section" id="catalogo"></section>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div class="modal-img-wrap" id="modalImgWrap">
+                <img id="modalImg" src="" alt="">
+            </div>
+            <div class="modal-body" id="modalBody">
+                <span class="categoria-badge" id="modalCategoria"></span>
+                <h2 id="modalNombre"></h2>
+                <p class="marca-modal" id="modalMarca"></p>
+                <p class="cilindraje-modal" id="modalCilindraje"></p>
+                <p class="descripcion-modal" id="modalDescripcion"></p>
+                <div class="precio-modal" id="modalPrecio"></div>
+                <button class="btn-modal-carrito" id="modalCarrito">Agregar al carrito</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        let motosGlobal = [];
+        let motoActual = null;
+
+        async function cargarMotos() {
+            try {
+                const respuesta = await fetch("/api/motos");
+                const motos = await respuesta.json();
+                motosGlobal = motos;
+
+                const catalogo = document.getElementById("catalogo");
+                catalogo.innerHTML = "";
+
+                const parametros = new URLSearchParams(window.location.search);
+                const categoriaSeleccionada = parametros.get("categoria");
+
+                let motosFiltradas = motos;
+
+                if (categoriaSeleccionada) {
+                    motosFiltradas = motos.filter(moto =>
+                        moto.categoria === categoriaSeleccionada
+                    );
+                    const titulo = document.getElementById("tituloCatalogo");
+                    if (titulo) {
+                        titulo.innerText = "Cat\u00e1logo - Gama " + categoriaSeleccionada;
+                    }
+                }
+
+                if (motosFiltradas.length === 0) {
+                    catalogo.innerHTML = '<div class="sin-resultados"><h2>No hay motocicletas disponibles</h2></div>';
+                    return;
+                }
+
+                motosFiltradas.forEach((moto, index) => {
+                    const card = document.createElement("div");
+                    card.className = "card";
+                    card.style.animationDelay = (index * 0.07) + "s";
+                    card.innerHTML = `
+                        <div class="card-img-wrap">
+                            <img src="${moto.imagen}" alt="${moto.nombre}" loading="lazy">
+                            <span class="card-categoria">${moto.categoria}</span>
+                        </div>
+                        <div class="contenido">
+                            <h3>${moto.nombre}</h3>
+                            <p class="marca">Marca: ${moto.marca} &middot; ${moto.cilindraje} cc</p>
+                            <p class="descripcion">${moto.descripcion || ''}</p>
+                            <div class="precio">$${moto.precio.toLocaleString ? moto.precio.toLocaleString('es') : moto.precio}</div>
+                            <button class="btn-carrito" data-id="${moto._id}">Agregar al carrito</button>
+                        </div>
+                    `;
+
+                    card.querySelector(".card-img-wrap").addEventListener("click", function(e) {
+                        e.stopPropagation();
+                        abrirModal(moto);
+                    });
+
+                    card.querySelector(".btn-carrito").addEventListener("click", function(ev) {
+                        ev.stopPropagation();
+                        agregarAlCarrito(moto._id);
+                    });
+
+                    catalogo.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error("Error al cargar motos:", error);
+                document.getElementById("catalogo").innerHTML =
+                    '<div class="sin-resultados"><h2>Error al cargar el cat\u00e1logo</h2></div>';
+            }
+        }
+
+        function abrirModal(moto) {
+            motoActual = moto;
+            document.getElementById("modalImg").src = moto.imagen;
+            document.getElementById("modalImg").alt = moto.nombre;
+            document.getElementById("modalCategoria").textContent = moto.categoria;
+            document.getElementById("modalNombre").textContent = moto.nombre;
+            document.getElementById("modalMarca").textContent = "Marca: " + moto.marca;
+            document.getElementById("modalCilindraje").textContent = "Cilindraje: " + moto.cilindraje + " cc";
+            document.getElementById("modalDescripcion").textContent = moto.descripcion || "Sin descripci\u00f3n disponible.";
+            document.getElementById("modalPrecio").textContent = "$" + (moto.precio.toLocaleString ? moto.precio.toLocaleString('es') : moto.precio);
+            document.getElementById("modalOverlay").classList.add("active");
+            document.body.style.overflow = "hidden";
+        }
+
+        function cerrarModal() {
+            document.getElementById("modalOverlay").classList.remove("active");
+            document.body.style.overflow = "";
+            motoActual = null;
+        }
+
+        document.getElementById("modalClose").addEventListener("click", cerrarModal);
+        document.getElementById("modalOverlay").addEventListener("click", function(e) {
+            if (e.target === this) cerrarModal();
+        });
+
+        document.addEventListener("keydown", function(e) {
+            if (e.key === "Escape") cerrarModal();
+        });
+
+        document.getElementById("modalCarrito").addEventListener("click", function() {
+            if (motoActual) {
+                agregarAlCarrito(motoActual._id);
+                cerrarModal();
+            }
+        });
+
+        function agregarAlCarrito(idMoto) {
+            const moto = motosGlobal.find(m => m._id === idMoto);
+            if (!moto) return;
+
+            let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+            const existe = carrito.find(item => item._id === moto._id);
+
+            if (existe) {
+                existe.cantidad++;
+            } else {
+                carrito.push({
+                    _id: moto._id,
+                    nombre: moto.nombre,
+                    marca: moto.marca,
+                    categoria: moto.categoria,
+                    cilindraje: moto.cilindraje,
+                    precio: moto.precio,
+                    imagen: moto.imagen,
+                    descripcion: moto.descripcion,
+                    cantidad: 1
+                });
+            }
+
+            localStorage.setItem("carrito", JSON.stringify(carrito));
+            actualizarContadorCarrito();
+
+            const btn = event && event.target;
+            if (btn && btn.classList.contains("btn-carrito")) {
+                const orig = btn.textContent;
+                btn.textContent = "Agregado!";
+                btn.style.background = "#00b894";
+                setTimeout(() => {
+                    btn.textContent = orig;
+                    btn.style.background = "";
+                }, 1200);
+            }
+        }
+
+        function actualizarContadorCarrito() {
+            const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+            let total = 0;
+            carrito.forEach(item => { total += item.cantidad || 1; });
+        }
+
+        function initParallax() {
+            const header = document.getElementById("mainHeader");
+            const headerTitle = document.getElementById("headerTitle");
+            const headerSub = document.getElementById("headerSub");
+            const headerBg = document.getElementById("headerBg");
+            const cards = document.querySelectorAll(".card");
+
+            let ticking = false;
+
+            window.addEventListener("scroll", function() {
+                if (!ticking) {
+                    window.requestAnimationFrame(function() {
+                        const scrollY = window.scrollY;
+                        const headerHeight = header.offsetHeight;
+
+                        if (scrollY <= headerHeight) {
+                            headerTitle.style.transform = "translateY(" + (scrollY * 0.25) + "px)";
+                            headerSub.style.transform = "translateY(" + (scrollY * 0.15) + "px)";
+                            headerBg.style.transform = "translateY(" + (scrollY * 0.1) + "px) scale(" + (1 + scrollY * 0.0005) + ")";
+                        }
+
+                        cards.forEach(function(card, i) {
+                            const rect = card.getBoundingClientRect();
+                            const center = rect.top + rect.height / 2;
+                            const viewportCenter = window.innerHeight / 2;
+                            const offset = (center - viewportCenter) * 0.04;
+                            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                                card.style.transform = "translateY(" + offset + "px)";
+                            }
+                        });
+
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }, { passive: true });
+        }
+
+        cargarMotos();
+        initParallax();
+
+    </script>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-col">
+                <div class="brand">Moto<span>Repuestos</span></div>
+                <p>Tu mejor opci&oacute;n en motocicletas y repuestos. Calidad y confianza desde 2026.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Navegaci&oacute;n</h3>
+                <a href="index.html">Inicio</a>
+                <a href="catalogo.html">Cat&aacute;logo</a>
+                <a href="contacto.html">Contacto</a>
+                <a href="carrito.html">Carrito</a>
+            </div>
+            <div class="footer-col">
+                <h3>Categor&iacute;as</h3>
+                <a href="catalogo.html?categoria=Baja">Gama Baja</a>
+                <a href="catalogo.html?categoria=Media">Gama Media</a>
+                <a href="catalogo.html?categoria=Alta">Gama Alta</a>
+                <a href="catalogo.html">Ver Todo</a>
+            </div>
+            <div class="footer-col">
+                <h3>Contacto</h3>
+                <p>Jinotepe, Carazo</p>
+                <p>+505 8696 1193</p>
+                <p>contacto@motorepuestos.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Motorepuestos. Todos los derechos reservados.
+        </div>
+    </footer>
+
+</body>
+</html>

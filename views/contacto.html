@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto | Motorepuestos</title>
+    <style>
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f8f9fa;
+            color: #2d3436;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 20px 45px;
+            position: relative;
+            overflow: hidden;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(233,69,96,.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(233,69,96,.08) 0%, transparent 50%);
+            animation: glow 8s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { transform: scale(1); opacity: .6; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .header-bg {
+            position: absolute;
+            inset: -100px -50px;
+            background:
+                radial-gradient(circle at 30% 40%, rgba(233,69,96,.06) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(233,69,96,.04) 0%, transparent 50%);
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: 4px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 4px 30px rgba(0,0,0,.3);
+            will-change: transform;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: .85;
+            margin-top: 8px;
+            position: relative;
+            z-index: 1;
+            will-change: transform;
+        }
+
+        nav {
+            background: #e94560;
+            padding: 0 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(233,69,96,.3);
+        }
+
+        nav a {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            padding: 16px 28px;
+            font-weight: 600;
+            font-size: .95rem;
+            letter-spacing: .3px;
+            transition: background .3s, transform .3s;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: white;
+            transition: all .3s;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        nav a:hover::after { width: 60%; }
+        nav a:hover { background: rgba(255,255,255,.1); }
+
+        .grid {
+            width: 92%;
+            max-width: 1200px;
+            margin: 50px auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 35px;
+            animation: fadeUp .6s ease-out;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .info, .formulario {
+            background: white;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,.06);
+            transition: transform .4s, box-shadow .4s;
+        }
+
+        .info:hover, .formulario:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0,0,0,.1);
+        }
+
+        h2 {
+            color: #1a1a2e;
+            font-size: 1.4rem;
+            margin-bottom: 22px;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: #e94560;
+            border-radius: 2px;
+        }
+
+        .info p {
+            margin-bottom: 14px;
+            line-height: 1.7;
+            color: #555;
+        }
+
+        .info p strong { color: #1a1a2e; }
+
+        .campo { margin-bottom: 18px; }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #2d3436;
+            font-size: .9rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 13px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: .95rem;
+            font-family: inherit;
+            transition: border-color .3s, box-shadow .3s;
+            background: #fafafa;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #e94560;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(233,69,96,.1);
+            background: white;
+        }
+
+        textarea {
+            resize: none;
+            height: 130px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            background: linear-gradient(135deg, #e94560, #d63046);
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 8px;
+            letter-spacing: .3px;
+            transition: transform .3s, box-shadow .3s;
+            box-shadow: 0 4px 16px rgba(233,69,96,.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(233,69,96,.4);
+        }
+
+        button:active { transform: translateY(0); }
+
+        .parallax-section {
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer {
+            background: #1a1a2e;
+            color: rgba(255,255,255,.8);
+            position: relative;
+            overflow: hidden;
+            margin-top: 40px;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #e94560, transparent);
+        }
+
+        .footer-inner {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 50px 7% 30px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        .footer-col h3 {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 18px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background: #e94560;
+            border-radius: 2px;
+        }
+
+        .footer-col p, .footer-col a {
+            color: rgba(255,255,255,.6);
+            font-size: .9rem;
+            line-height: 1.8;
+            text-decoration: none;
+            display: block;
+            transition: color .3s, transform .3s;
+        }
+
+        .footer-col a:hover {
+            color: #e94560;
+            transform: translateX(3px);
+        }
+
+        .footer-col .brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .footer-col .brand span { color: #e94560; }
+        .footer-col .brand::after { display: none; }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,.08);
+            padding: 20px 7%;
+            text-align: center;
+            font-size: .85rem;
+            color: rgba(255,255,255,.4);
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            header { min-height: 160px; padding: 35px 20px 30px; }
+
+            nav a { padding: 14px 16px; }
+            nav a::after { display: none; }
+
+            .grid { grid-template-columns: 1fr; gap: 24px; }
+            .info, .formulario { padding: 25px 20px; }
+
+            .footer-inner { grid-template-columns: 1fr 1fr; gap: 30px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header id="mainHeader">
+        <div class="header-bg" id="headerBg"></div>
+        <h1 id="headerTitle">MOTOREPUESTOS</h1>
+        <p id="headerSub">Cont&aacute;ctanos</p>
+    </header>
+
+    <nav>
+        <a href="index.html">Inicio</a>
+        <a href="catalogo.html">Cat&aacute;logo</a>
+        <a href="contacto.html">Contacto</a>
+    </nav>
+
+    <div class="grid parallax-section">
+
+        <div class="info">
+            <h2>Informaci&oacute;n de Contacto</h2>
+            <p><strong>Empresa:</strong> Motorepuestos</p>
+            <p><strong>Direcci&oacute;n:</strong> Jinotepe, Carazo</p>
+            <p><strong>Tel&eacute;fono:</strong> +505 8696 1193</p>
+            <p><strong>Correo:</strong> contacto@motorepuestos.com</p>
+            <p>Estamos comprometidos en brindarte la mejor atenci&oacute;n para ayudarte a encontrar la motocicleta o repuesto que necesitas.</p>
+        </div>
+
+        <div class="formulario">
+            <h2>Enviar Mensaje</h2>
+            <form id="contactForm">
+                <div class="campo">
+                    <label>Nombre Completo</label>
+                    <input type="text" required>
+                </div>
+                <div class="campo">
+                    <label>Correo Electr&oacute;nico</label>
+                    <input type="email" required>
+                </div>
+                <div class="campo">
+                    <label>Tel&eacute;fono</label>
+                    <input type="tel">
+                </div>
+                <div class="campo">
+                    <label>Mensaje</label>
+                    <textarea required></textarea>
+                </div>
+                <button type="submit">Enviar Mensaje</button>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById("contactForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const btn = this.querySelector("button");
+            const orig = btn.textContent;
+            btn.textContent = "Enviado!";
+            btn.style.background = "#00b894";
+            setTimeout(() => {
+                btn.textContent = orig;
+                btn.style.background = "";
+                this.reset();
+            }, 2000);
+        });
+
+        function initParallax() {
+            const header = document.getElementById("mainHeader");
+            const headerTitle = document.getElementById("headerTitle");
+            const headerSub = document.getElementById("headerSub");
+            const headerBg = document.getElementById("headerBg");
+
+            let ticking = false;
+            window.addEventListener("scroll", function() {
+                if (!ticking) {
+                    window.requestAnimationFrame(function() {
+                        const scrollY = window.scrollY;
+                        const headerHeight = header.offsetHeight;
+
+                        if (scrollY <= headerHeight) {
+                            headerTitle.style.transform = "translateY(" + (scrollY * 0.25) + "px)";
+                            headerSub.style.transform = "translateY(" + (scrollY * 0.15) + "px)";
+                            headerBg.style.transform = "translateY(" + (scrollY * 0.1) + "px) scale(" + (1 + scrollY * 0.0005) + ")";
+                        }
+
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }, { passive: true });
+        }
+
+        initParallax();
+    </script>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-col">
+                <div class="brand">Moto<span>Repuestos</span></div>
+                <p>Tu mejor opci&oacute;n en motocicletas y repuestos. Calidad y confianza desde 2026.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Navegaci&oacute;n</h3>
+                <a href="index.html">Inicio</a>
+                <a href="catalogo.html">Cat&aacute;logo</a>
+                <a href="contacto.html">Contacto</a>
+                <a href="carrito.html">Carrito</a>
+            </div>
+            <div class="footer-col">
+                <h3>Categor&iacute;as</h3>
+                <a href="catalogo.html?categoria=Baja">Gama Baja</a>
+                <a href="catalogo.html?categoria=Media">Gama Media</a>
+                <a href="catalogo.html?categoria=Alta">Gama Alta</a>
+                <a href="catalogo.html">Ver Todo</a>
+            </div>
+            <div class="footer-col">
+                <h3>Contacto</h3>
+                <p>Jinotepe, Carazo</p>
+                <p>+505 8696 1193</p>
+                <p>contacto@motorepuestos.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Motorepuestos. Todos los derechos reservados.
+        </div>
+    </footer>
+
+</body>
+</html>

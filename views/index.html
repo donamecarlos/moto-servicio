@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motorepuestos | Inicio</title>
+    <style>
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f8f9fa;
+            color: #2d3436;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            text-align: center;
+            padding: 55px 20px 50px;
+            position: relative;
+            overflow: hidden;
+            min-height: 260px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 25% 40%, rgba(233,69,96,.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 75% 60%, rgba(233,69,96,.08) 0%, transparent 50%);
+            animation: headerGlow 8s ease-in-out infinite;
+        }
+
+        @keyframes headerGlow {
+            0%, 100% { transform: scale(1); opacity: .6; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .header-bg {
+            position: absolute;
+            inset: -100px -50px;
+            background:
+                radial-gradient(circle at 30% 40%, rgba(233,69,96,.06) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(233,69,96,.04) 0%, transparent 50%);
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: 4px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 4px 30px rgba(0,0,0,.3);
+            will-change: transform;
+        }
+
+        header p {
+            font-size: 1.15rem;
+            opacity: .85;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+            will-change: transform;
+        }
+
+        nav {
+            background: #e94560;
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(233,69,96,.3);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        nav ul li a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 16px 28px;
+            font-weight: 600;
+            font-size: .95rem;
+            letter-spacing: .5px;
+            position: relative;
+            transition: background .3s, transform .3s;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: white;
+            transition: all .3s;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        nav ul li a:hover::after { width: 60%; }
+        nav ul li a:hover { background: rgba(255,255,255,.1); transform: translateY(-1px); }
+
+        main {
+            width: 92%;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        section {
+            background: white;
+            margin-bottom: 30px;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,.06);
+            transition: transform .4s, box-shadow .4s;
+            animation: fadeInScale .6s ease-out both;
+        }
+
+        section:nth-child(1) { animation-delay: .1s; }
+        section:nth-child(2) { animation-delay: .25s; }
+        section:nth-child(3) { animation-delay: .4s; }
+        section:nth-child(4) { animation-delay: .55s; }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0,0,0,.1);
+        }
+
+        section h2 {
+            color: #1a1a2e;
+            font-size: 1.6rem;
+            margin-bottom: 18px;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: #e94560;
+            border-radius: 2px;
+        }
+
+        article {
+            background: #f8f9fa;
+            padding: 20px 22px;
+            margin-top: 14px;
+            border-radius: 10px;
+            border-left: 4px solid #e94560;
+            transition: transform .3s, box-shadow .3s, border-color .3s;
+        }
+
+        article:hover {
+            transform: translateX(6px);
+            box-shadow: 0 4px 16px rgba(0,0,0,.06);
+            border-color: #1a1a2e;
+        }
+
+        article h3 {
+            color: #1a1a2e;
+            margin-bottom: 8px;
+            font-size: 1.15rem;
+        }
+
+        ul { padding-left: 20px; }
+
+        ul li {
+            margin-bottom: 10px;
+            padding-left: 4px;
+            transition: transform .2s, color .2s;
+        }
+
+        ul li:hover {
+            transform: translateX(4px);
+            color: #e94560;
+        }
+
+        .btn-catalogo {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 14px 36px;
+            background: linear-gradient(135deg, #e94560, #d63046);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: .5px;
+            transition: transform .3s, box-shadow .3s;
+            box-shadow: 0 4px 16px rgba(233,69,96,.35);
+        }
+
+        .btn-catalogo:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 28px rgba(233,69,96,.45);
+        }
+
+        .btn-catalogo:active { transform: translateY(-1px) scale(.98); }
+
+        .bienvenida {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 50px;
+            padding: 50px;
+        }
+
+        .texto-bienvenida { flex: 1; }
+
+        .texto-bienvenida h2 {
+            font-size: 2rem;
+            color: #1a1a2e;
+        }
+
+        .texto-bienvenida h2::after { display: none; }
+
+        .texto-bienvenida p {
+            margin-bottom: 14px;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .imagen-bienvenida {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .imagen-bienvenida img {
+            width: 100%;
+            max-width: 480px;
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(0,0,0,.15);
+            transition: transform .5s, box-shadow .5s;
+        }
+
+        .imagen-bienvenida img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 18px 50px rgba(0,0,0,.2);
+        }
+
+        footer {
+            background: #1a1a2e;
+            color: rgba(255,255,255,.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #e94560, transparent);
+        }
+
+        .footer-inner {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 50px 7% 30px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        .footer-col h3 {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 18px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background: #e94560;
+            border-radius: 2px;
+        }
+
+        .footer-col p, .footer-col a {
+            color: rgba(255,255,255,.6);
+            font-size: .9rem;
+            line-height: 1.8;
+            text-decoration: none;
+            display: block;
+            transition: color .3s, transform .3s;
+        }
+
+        .footer-col a:hover {
+            color: #e94560;
+            transform: translateX(3px);
+        }
+
+        .footer-col .brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .footer-col .brand span { color: #e94560; }
+        .footer-col .brand::after { display: none; }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,.08);
+            padding: 20px 7%;
+            text-align: center;
+            font-size: .85rem;
+            color: rgba(255,255,255,.4);
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.2rem; }
+            header { min-height: 200px; padding: 40px 20px 35px; }
+
+            nav ul { flex-direction: column; }
+
+            nav ul li a {
+                text-align: center;
+                border-bottom: 1px solid rgba(255,255,255,.1);
+                padding: 14px;
+            }
+
+            nav ul li a::after { display: none; }
+
+            .bienvenida {
+                flex-direction: column;
+                text-align: center;
+                padding: 30px 20px;
+            }
+
+            section { padding: 25px 20px; }
+
+            .footer-inner {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header id="mainHeader">
+        <div class="header-bg" id="headerBg"></div>
+        <h1 id="headerTitle">MOTOREPUESTOS</h1>
+        <p id="headerSub">Tu mejor opci&oacute;n en motocicletas y repuestos</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="catalogo.html">Cat&aacute;logo</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+            <li><a href="carrito.html">Carrito</a></li>
+        </ul>
+    </nav>
+
+    <main>
+
+        <section class="bienvenida" id="sectionBienvenida">
+            <div class="texto-bienvenida">
+                <h2>Bienvenido a Motorepuestos</h2>
+                <p>
+                    Somos una empresa especializada en la venta de motocicletas,
+                    accesorios y repuestos de alta calidad. Nuestro objetivo es
+                    ofrecer a nuestros clientes las mejores opciones del mercado
+                    para satisfacer sus necesidades de movilidad.
+                </p>
+                <p>
+                    Contamos con motocicletas de gama baja, media y alta,
+                    adaptadas a diferentes presupuestos y estilos de conducci&oacute;n.
+                </p>
+            </div>
+            <div class="imagen-bienvenida" id="imgBienvenida">
+                <img src="img/FONT1.gif" alt="Motocicleta deportiva" id="imgParallax">
+            </div>
+        </section>
+
+        <section>
+            <h2>Nuestras Categor&iacute;as</h2>
+            <article>
+                <h3>Gama Baja</h3>
+                <p>Motocicletas econ&oacute;micas ideales para transporte diario y ahorro de combustible.</p>
+            </article>
+            <article>
+                <h3>Gama Media</h3>
+                <p>Modelos con mayor potencia, comodidad y tecnolog&iacute;a para usuarios exigentes.</p>
+            </article>
+            <article>
+                <h3>Gama Alta</h3>
+                <p>Motocicletas premium con el mejor rendimiento, dise&ntilde;o y prestaciones del mercado.</p>
+            </article>
+        </section>
+
+        <section>
+            <h2>&iquest;Por qu&eacute; elegirnos?</h2>
+            <ul>
+                <li>Amplio cat&aacute;logo de motocicletas.</li>
+                <li>Repuestos originales y garantizados.</li>
+                <li>Atenci&oacute;n personalizada.</li>
+                <li>Precios competitivos.</li>
+                <li>Soporte y asesor&iacute;a especializada.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Explora Nuestro Cat&aacute;logo</h2>
+            <p>Descubre las motocicletas disponibles y encuentra la opci&oacute;n perfecta para ti.</p>
+            <a href="catalogo.html" class="btn-catalogo">Ver Cat&aacute;logo</a>
+        </section>
+
+    </main>
+
+    <script>
+
+        function initParallax() {
+            const header = document.getElementById("mainHeader");
+            const headerTitle = document.getElementById("headerTitle");
+            const headerSub = document.getElementById("headerSub");
+            const headerBg = document.getElementById("headerBg");
+            const imgParallax = document.getElementById("imgParallax");
+
+            let ticking = false;
+
+            window.addEventListener("scroll", function() {
+                if (!ticking) {
+                    window.requestAnimationFrame(function() {
+                        const scrollY = window.scrollY;
+                        const headerHeight = header.offsetHeight;
+
+                        if (scrollY <= headerHeight) {
+                            headerTitle.style.transform = "translateY(" + (scrollY * 0.3) + "px)";
+                            headerSub.style.transform = "translateY(" + (scrollY * 0.18) + "px)";
+                            headerBg.style.transform = "translateY(" + (scrollY * 0.1) + "px) scale(" + (1 + scrollY * 0.0005) + ")";
+                        }
+
+                        const imgRect = imgParallax.getBoundingClientRect();
+                        const imgCenter = imgRect.top + imgRect.height / 2;
+                        const vpCenter = window.innerHeight / 2;
+                        const imgOffset = (imgCenter - vpCenter) * 0.06;
+                        imgParallax.style.transform = "translateY(" + imgOffset + "px)";
+
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }, { passive: true });
+        }
+
+        initParallax();
+
+    </script>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-col">
+                <div class="brand">Moto<span>Repuestos</span></div>
+                <p>Tu mejor opci&oacute;n en motocicletas y repuestos. Calidad y confianza desde 2026.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Navegaci&oacute;n</h3>
+                <a href="index.html">Inicio</a>
+                <a href="catalogo.html">Cat&aacute;logo</a>
+                <a href="contacto.html">Contacto</a>
+                <a href="carrito.html">Carrito</a>
+            </div>
+            <div class="footer-col">
+                <h3>Categor&iacute;as</h3>
+                <a href="catalogo.html?categoria=Baja">Gama Baja</a>
+                <a href="catalogo.html?categoria=Media">Gama Media</a>
+                <a href="catalogo.html?categoria=Alta">Gama Alta</a>
+                <a href="catalogo.html">Ver Todo</a>
+            </div>
+            <div class="footer-col">
+                <h3>Contacto</h3>
+                <p>Jinotepe, Carazo</p>
+                <p>+505 8696 1193</p>
+                <p>contacto@motorepuestos.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Motorepuestos. Todos los derechos reservados.
+        </div>
+    </footer>
+
+</body>
+</html>

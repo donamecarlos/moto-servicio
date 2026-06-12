@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito | Motorepuestos</title>
+    <style>
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f8f9fa;
+            color: #2d3436;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 25px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 90px;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(233,69,96,.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(233,69,96,.06) 0%, transparent 50%);
+            animation: glow 8s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { transform: scale(1); opacity: .6; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .header-bg {
+            position: absolute;
+            inset: -80px -50px;
+            background:
+                radial-gradient(circle at 30% 40%, rgba(233,69,96,.05) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(233,69,96,.03) 0%, transparent 50%);
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+            will-change: transform;
+        }
+
+        .logo span { color: #e94560; }
+
+        nav {
+            display: flex;
+            gap: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        nav a {
+            color: rgba(255,255,255,.85);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: .95rem;
+            transition: color .3s, transform .3s;
+        }
+
+        nav a:hover {
+            color: #e94560;
+            transform: translateY(-1px);
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1300px;
+            margin: 40px auto;
+            animation: fadeUp .6s ease-out;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .title {
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            color: #1a1a2e;
+            font-weight: 800;
+        }
+
+        .cart-grid { display: grid; gap: 20px; }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,.06);
+            transition: transform .4s cubic-bezier(.175,.885,.32,1.275), box-shadow .4s ease;
+            animation: slideIn .45s ease-out both;
+            position: relative;
+        }
+
+        .card:nth-child(1) { animation-delay: .05s; }
+        .card:nth-child(2) { animation-delay: .1s; }
+        .card:nth-child(3) { animation-delay: .15s; }
+        .card:nth-child(4) { animation-delay: .2s; }
+        .card:nth-child(5) { animation-delay: .25s; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .card:hover {
+            transform: translateY(-4px) scale(1.005);
+            box-shadow: 0 12px 40px rgba(0,0,0,.1);
+        }
+
+        .card img {
+            width: 160px;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform .4s ease;
+            flex-shrink: 0;
+        }
+
+        .card:hover img { transform: scale(1.05); }
+
+        .info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .info h3 {
+            margin-bottom: 6px;
+            color: #1a1a2e;
+            font-size: 1.15rem;
+        }
+
+        .info p {
+            margin-bottom: 4px;
+            color: #636e72;
+            font-size: .9rem;
+        }
+
+        .info .quantity {
+            font-weight: 700;
+            color: #2d3436;
+            margin-top: 4px;
+        }
+
+        .info .price {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #00b894;
+            margin-top: 8px;
+        }
+
+        .delete-btn {
+            border: none;
+            background: transparent;
+            color: #e94560;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: .9rem;
+            transition: background .3s, color .3s, transform .3s;
+            flex-shrink: 0;
+            border: 2px solid #e94560;
+        }
+
+        .delete-btn:hover {
+            background: #e94560;
+            color: white;
+            transform: scale(1.04);
+        }
+
+        .total-box {
+            margin-top: 30px;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,.06);
+            animation: fadeUp .6s ease-out .3s both;
+        }
+
+        .total-box h2 {
+            margin-bottom: 20px;
+            color: #1a1a2e;
+            font-size: 1.5rem;
+        }
+
+        .checkout {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: .3px;
+            transition: transform .3s, box-shadow .3s;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 16px rgba(26,26,46,.3);
+        }
+
+        .checkout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(26,26,46,.4);
+        }
+
+        .clear-cart {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e94560;
+            background: transparent;
+            color: #e94560;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: background .3s, color .3s, transform .3s;
+        }
+
+        .clear-cart:hover {
+            background: #e94560;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .empty {
+            background: white;
+            padding: 80px 20px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,.06);
+            animation: fadeUp .6s ease-out;
+        }
+
+        .empty h2 { margin-bottom: 12px; color: #1a1a2e; }
+        .empty p { color: #636e72; }
+
+        footer {
+            background: #1a1a2e;
+            color: rgba(255,255,255,.8);
+            position: relative;
+            overflow: hidden;
+            margin-top: 40px;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #e94560, transparent);
+        }
+
+        .footer-inner {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 50px 7% 30px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        .footer-col h3 {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 18px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background: #e94560;
+            border-radius: 2px;
+        }
+
+        .footer-col p, .footer-col a {
+            color: rgba(255,255,255,.6);
+            font-size: .9rem;
+            line-height: 1.8;
+            text-decoration: none;
+            display: block;
+            transition: color .3s, transform .3s;
+        }
+
+        .footer-col a:hover {
+            color: #e94560;
+            transform: translateX(3px);
+        }
+
+        .footer-col .brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .footer-col .brand span { color: #e94560; }
+        .footer-col .brand::after { display: none; }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,.08);
+            padding: 20px 7%;
+            text-align: center;
+            font-size: .85rem;
+            color: rgba(255,255,255,.4);
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+                padding: 20px 5%;
+                min-height: auto;
+            }
+
+            nav { flex-wrap: wrap; justify-content: center; gap: 16px; }
+
+            .card {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+
+            .card img { width: 100%; height: 200px; }
+
+            .delete-btn { width: 100%; }
+            .title { font-size: 1.7rem; }
+
+            .footer-inner { grid-template-columns: 1fr 1fr; gap: 30px; }
+        }
+
+    </style>
+</head>
+<body>
+
+<header id="mainHeader">
+    <div class="header-bg" id="headerBg"></div>
+    <div class="logo" id="headerLogo">Moto<span>Repuestos</span></div>
+    <nav id="headerNav">
+        <a href="index.html">Inicio</a>
+        <a href="catalogo.html">Cat&aacute;logo</a>
+        <a href="contacto.html">Contacto</a>
+        <a href="carrito.html">Carrito</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h1 class="title">Mi Carrito</h1>
+
+    <div id="cartContainer" class="cart-grid"></div>
+
+    <div class="total-box" id="totalBox">
+        <h2 id="total">Total: $0</h2>
+        <button class="checkout" id="checkoutBtn">Finalizar Compra</button>
+        <button class="clear-cart" id="clearCartBtn">Vaciar Carrito</button>
+    </div>
+</div>
+
+<script>
+
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    const cartContainer = document.getElementById("cartContainer");
+    const totalElement = document.getElementById("total");
+
+    function mostrarCarrito() {
+        cartContainer.innerHTML = "";
+        let total = 0;
+
+        if (carrito.length === 0) {
+            cartContainer.innerHTML = `
+                <div class="empty">
+                    <h2>Tu carrito est&aacute; vac&iacute;o</h2>
+                    <p>Agrega motocicletas desde el cat&aacute;logo para comenzar.</p>
+                </div>
+            `;
+            totalElement.innerText = "Total: $0";
+            return;
+        }
+
+        carrito.forEach((producto, index) => {
+            const cantidad = producto.cantidad || 1;
+            const subtotal = producto.precio * cantidad;
+            total += subtotal;
+
+            const card = document.createElement("div");
+            card.className = "card";
+            card.style.animationDelay = (index * 0.08) + "s";
+            card.innerHTML = `
+                <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy">
+                <div class="info">
+                    <h3>${producto.nombre}</h3>
+                    <p>${producto.descripcion || ''}</p>
+                    <p class="quantity">Cantidad: ${cantidad}</p>
+                    <div class="price">$${subtotal.toFixed(2)}</div>
+                </div>
+                <button class="delete-btn" data-index="${index}">Eliminar</button>
+            `;
+
+            card.querySelector(".delete-btn").addEventListener("click", function() {
+                eliminarProducto(index);
+            });
+
+            cartContainer.appendChild(card);
+        });
+
+        totalElement.innerText = "Total: $" + total.toFixed(2);
+    }
+
+    function eliminarProducto(index) {
+        const producto = carrito[index];
+        if (!producto) return;
+
+        const confirmar = confirm("Desea eliminar " + producto.nombre + " del carrito?");
+        if (!confirmar) return;
+
+        const cards = cartContainer.querySelectorAll(".card");
+        if (cards[index]) {
+            cards[index].style.transition = "transform .35s ease, opacity .35s ease";
+            cards[index].style.transform = "translateX(60px)";
+            cards[index].style.opacity = "0";
+        }
+
+        setTimeout(() => {
+            carrito.splice(index, 1);
+            localStorage.setItem("carrito", JSON.stringify(carrito));
+            mostrarCarrito();
+        }, 350);
+    }
+
+    function vaciarCarrito() {
+        if (carrito.length === 0) return;
+        if (!confirm("Desea vaciar el carrito completo?")) return;
+
+        const cards = cartContainer.querySelectorAll(".card");
+        cards.forEach((card, i) => {
+            setTimeout(() => {
+                card.style.transition = "transform .3s ease, opacity .3s ease";
+                card.style.transform = "translateX(80px)";
+                card.style.opacity = "0";
+            }, i * 60);
+        });
+
+        setTimeout(() => {
+            carrito = [];
+            localStorage.setItem("carrito", JSON.stringify(carrito));
+            mostrarCarrito();
+        }, cards.length * 60 + 300);
+    }
+
+    document.getElementById("checkoutBtn").addEventListener("click", () => {
+        if (carrito.length === 0) {
+            alert("El carrito est\u00e1 vac\u00edo.");
+            return;
+        }
+        alert("Compra realizada correctamente. Gracias por elegir Motorepuestos.");
+        carrito = [];
+        localStorage.setItem("carrito", JSON.stringify(carrito));
+        mostrarCarrito();
+    });
+
+    document.getElementById("clearCartBtn").addEventListener("click", vaciarCarrito);
+
+    mostrarCarrito();
+
+    function initParallax() {
+        const headerLogo = document.getElementById("headerLogo");
+        const headerNav = document.getElementById("headerNav");
+        const headerBg = document.getElementById("headerBg");
+
+        let ticking = false;
+        window.addEventListener("scroll", function() {
+            if (!ticking) {
+                window.requestAnimationFrame(function() {
+                    const scrollY = window.scrollY;
+                    const header = document.getElementById("mainHeader");
+                    const headerHeight = header.offsetHeight;
+
+                    if (scrollY <= headerHeight) {
+                        headerLogo.style.transform = "translateY(" + (scrollY * 0.3) + "px)";
+                        headerNav.style.transform = "translateY(" + (scrollY * 0.15) + "px)";
+                        headerBg.style.transform = "translateY(" + (scrollY * 0.1) + "px)";
+                    }
+
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+    }
+
+    initParallax();
+
+</script>
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-col">
+            <div class="brand">Moto<span>Repuestos</span></div>
+            <p>Tu mejor opci&oacute;n en motocicletas y repuestos. Calidad y confianza desde 2026.</p>
+        </div>
+        <div class="footer-col">
+            <h3>Navegaci&oacute;n</h3>
+            <a href="index.html">Inicio</a>
+            <a href="catalogo.html">Cat&aacute;logo</a>
+            <a href="contacto.html">Contacto</a>
+            <a href="carrito.html">Carrito</a>
+        </div>
+        <div class="footer-col">
+            <h3>Categor&iacute;as</h3>
+            <a href="catalogo.html?categoria=Baja">Gama Baja</a>
+            <a href="catalogo.html?categoria=Media">Gama Media</a>
+            <a href="catalogo.html?categoria=Alta">Gama Alta</a>
+            <a href="catalogo.html">Ver Todo</a>
+        </div>
+        <div class="footer-col">
+            <h3>Contacto</h3>
+            <p>Jinotepe, Carazo</p>
+            <p>+505 8696 1193</p>
+            <p>contacto@motorepuestos.com</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        &copy; 2026 Motorepuestos. Todos los derechos reservados.
+    </div>
+</footer>
+
+</body>
+</html>
